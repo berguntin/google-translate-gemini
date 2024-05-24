@@ -1,10 +1,14 @@
 import { MdContentCopy } from 'react-icons/md'
+import toast from 'react-hot-toast'
 
 const Loading = () => <span className='animate-pulse'>⏺</span>
 
 export function TranslateTextOutput ({ result = '', isLoading }: { result: string, isLoading: boolean }) {
   const copyToClipboard = () => {
+    if(isLoading || result === '') return
+
     navigator.clipboard.writeText(result)
+    toast.success('Texto copiado al portapapeles!')
   }
 
   const renderResult = () => {
@@ -16,8 +20,9 @@ export function TranslateTextOutput ({ result = '', isLoading }: { result: strin
 
   return (
     <div className='w-6/12 bg-gray-100 rounded-br-lg p-4'>
-      <div className='h-40'>
-        <div className='text-base resize-none bg-transparent pointer-events-none lg:text-2xl text-black h-10'>
+      <div className='h-40 overflow-y-scroll'>
+        <div 
+        className='text-base resize-none bg-transparent pointer-events-none lg:text-2xl text-black h-10'>
           {renderResult()}
         </div>
       </div>

@@ -7,7 +7,7 @@ export function TranslateTextInput ({ onChange, text = '' }: { onChange: (text: 
 
   return (
     <div className='w-6/12 border-r border-gray-200 p-4'>
-      <div className='h-40'>
+      <div className='h-40 '>
         <div className='flex flex-row'>
           <textarea
             autoFocus

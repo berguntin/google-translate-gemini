@@ -14,21 +14,43 @@ export function Chat () {
   const [from, setFrom] = useState(FROM_LANGUAGES[0])
   const [to, setTo] = useState(TO_LANGUAGES[0])
 
-  // 1. Create state to store user text
-  // 2. Pass text and onChange callback to TranslateTextInput
-  // 3. Add useCompletion hook to call to `/api/translate`
-  // 4. Call `complete` on changing the input
-  // 5. Call `complete` with useEffect when changing from or to
-  // 6. Add useDebounce to improve performance
-  // 7. Add useEffect to call complete when param changes
+  const [text, setText] = useState('')
+
+  const {complete, completion, isLoading, stop} = useCompletion({
+    api: '/api/translate',
+  })
+
+  const debouncedText = useDebounce(text, 500)
+  
+  useEffect(()=> {
+    
+    if (debouncedText !== '') {
+      
+      complete(debouncedText, {
+        body: {
+          from,
+           to
+        }
+      })
+      
+    }
+    
+    
+  }, [debouncedText, from, to])
+
+const handleChange = (text: string) => {
+  stop
+  setText(text)
+  
+}
 
   return (
     <>
       <LanguageSelector from={from} setFrom={setFrom} to={to} setTo={setTo} />
 
       <div className='flex'>
-        <TranslateTextInput />
-        <TranslateTextOutput />
+        <TranslateTextInput text={text} onChange={handleChange}/>
+        <TranslateTextOutput result={completion} isLoading={isLoading}/>
       </div>
     </>
   )
